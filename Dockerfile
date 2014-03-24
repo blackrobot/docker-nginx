@@ -1,28 +1,25 @@
-#
 # Nginx Dockerfile
 #
-# https://github.com/dockerfile/nginx
-#
+# https://github.com/blackrobot/docker-nginx
 
-# Pull base image.
-FROM dockerfile/ubuntu
+FROM damon/base
 
 # Install Nginx.
-RUN apt-get install -y software-properties-common
 RUN add-apt-repository -y ppa:nginx/stable
-RUN apt-get update
-RUN apt-get install -y nginx
+RUN apt-get update -qq && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -qqy nginx
 RUN echo "\ndaemon off;" >> /etc/nginx/nginx.conf
 
 # Attach volumes.
-VOLUME /etc/nginx/sites-enabled
+VOLUME /etc/nginx
 VOLUME /var/log/nginx
 
 # Set working directory.
 WORKDIR /etc/nginx
 
-# Expose ports.
+# Expose ports
 EXPOSE 80
+EXPOSE 443
 
 # Define default command.
 ENTRYPOINT ["nginx"]
